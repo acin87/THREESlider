@@ -34,7 +34,7 @@ class Slider {
 	private canvasContainer: HTMLDivElement;
 	
 	
-	constructor(canvas: HTMLCanvasElement, options?: SliderOption){
+	public constructor(canvas: HTMLCanvasElement, options?: SliderOption){
 
 		this.options = new Object();
 		this.initOptions(options);
@@ -137,7 +137,7 @@ class Slider {
 		return textureArray;
 	}
 
-	createDotsListener(){
+	private createDotsListener(){
 		if(this.dotsContainer != undefined){
 			const dot = this.dotsContainer.children;
 			for (let i = 0; i <  this.dotsContainer.childElementCount; i++){
@@ -158,17 +158,16 @@ class Slider {
 						this.material.uniforms.invert.value = 1;
 						this.controls.acceleration -= 8;
 					}
-					
 				});
 			}
 		}
 	}
-	updateTextures(){
+	private updateTextures(){
 		this.material.uniforms.tex1.value = this.textures[this.nextTextures];
 		this.material.uniforms.tex2.value = this.textures[this.currentTextures];
 	}
 
-	init(){
+	public init(){
 		this.renderer.setAnimationLoop(()=>{
 			this.controls.update();
 			if(this.controls.position != 0){
@@ -219,8 +218,6 @@ class Slider {
 						default:
 							break;
 					}
-					
-					
 				}
 				if(this.options.dots){
 					this.controls.updateDotsPosions(this.currentTextures);
@@ -239,9 +236,6 @@ class Slider {
 				this.camera.updateProjectionMatrix();
 			}
 		});
-	}
-	getDots(){
-		
 	}
 }
 export {Slider};

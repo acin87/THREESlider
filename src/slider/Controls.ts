@@ -52,12 +52,12 @@ class Controls{
 			}
 		});
 
-		window.addEventListener(MOUSE_DOWN, (e)=>{
+		canvas.addEventListener(MOUSE_DOWN, (e)=>{
 			e.preventDefault();
 			this.mouseDown = true;
 		});
 		
-		window.addEventListener(MOUSE_MOVE, (e)=>{
+		canvas.addEventListener(MOUSE_MOVE, (e)=>{
 			if(this.mouseDown){
 				if (e.movementX > 0 && e.movementY == 0) {
 					this.direction = 1;
@@ -69,7 +69,7 @@ class Controls{
 			}
 		});
 		
-		window.addEventListener(MOUSE_UP, (e) => {
+		canvas.addEventListener(MOUSE_UP, (e) => {
 			e.preventDefault();
 			this.mouseDown = false;
 		});
@@ -81,14 +81,11 @@ class Controls{
 			if(options.autoLoop.delay){
 				delay = options.autoLoop.delay;
 			}
-			
-			
 			setInterval(()=>{
 				this.actions = 1;
 				this.direction = 1;
 				this.acceleration +=8;
 			},delay);
-			//clearInterval(autoLoop);
 		}
 			
 		if(options.arrow){
@@ -159,10 +156,7 @@ class Controls{
 		return dotsContainer;
 	}
 
-	
-
 	updateDotsPosions(pos:number){
-		
 		if(this.dotsContainer != undefined){
 			const dot = this.dotsContainer.children;
 			for (let i = 0; i <  this.dotsContainer.childElementCount; i++) {
@@ -170,7 +164,6 @@ class Controls{
 				if(pos == i){
 					dot[i].classList.add('nav-dot-selected');
 				}
-				
 			}	
 		}
 	}

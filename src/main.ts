@@ -2,9 +2,9 @@ import { Slider } from './slider/Slider';
 
 const body = document.querySelector('body');
 const canvas = document.createElement('canvas');
-const container = document.createElement('div');
 
-container.appendChild(canvas);
+
+
 const slider = new Slider(canvas,
 	{
 		dots: true,
@@ -13,7 +13,6 @@ const slider = new Slider(canvas,
 		
 	});
 
-
-container.className = canvas.className +'-container';
-body?.appendChild(container);
+const canvasContainer = slider.getCanvasContainer();
+body?.appendChild(canvasContainer);
 slider.init();

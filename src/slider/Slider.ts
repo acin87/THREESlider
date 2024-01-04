@@ -31,6 +31,7 @@ class Slider {
 	private nextTextures: number;
 
 	private updated: boolean;
+	private canvasContainer: HTMLDivElement;
 	
 	
 	constructor(canvas: HTMLCanvasElement, options?: SliderOption){
@@ -40,6 +41,7 @@ class Slider {
 	
 		this.canvas = canvas;
 		this.canvas.className = CANVAS_STYLE;
+		this.canvasContainer = this.createCanvasContainer();
 		
 		this.updated = true;
 
@@ -74,7 +76,7 @@ class Slider {
 		this.camera = camera;
 				
 		this.scene.add(camera);
-		this.geometry = new THREE.PlaneGeometry(22, 9, 4, 4);
+		this.geometry = new THREE.PlaneGeometry(28, 9, 4, 4);
 		this.material = this.createMaterial();
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
 		this.scene.add(this.mesh);
@@ -82,11 +84,21 @@ class Slider {
 	}
 	private initOptions(options?: SliderOption){
 		this.options.dots = false;
-		this.options.loop = true;
+		this.options.loop = false;
 		this.options.arrow = false;
 		if (options != undefined) {	
 			this.options = Object.assign(this.options, options);
 		}
+	}
+
+	private createCanvasContainer(){
+		const container = document.createElement('div');
+		container.className = this.canvas.className +'-container';
+		container.appendChild(this.canvas);
+		return container;
+	}
+	public getCanvasContainer(){
+		return this.canvasContainer;
 	}
 
 	private createMaterial(){
@@ -210,8 +222,10 @@ class Slider {
 					
 					
 				}
-
-				this.controls.updateDotsPosions(this.currentTextures);
+				if(this.options.dots){
+					this.controls.updateDotsPosions(this.currentTextures);
+				}
+				
 				if(this.updated){
 					this.setBlend((this.controls.position % this.scrollPerImage) / (this.scrollPerImage));
 				}

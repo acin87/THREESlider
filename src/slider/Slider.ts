@@ -1,4 +1,3 @@
-
 import * as THREE from 'three';
 import GlichShaders from './Shaders';
 import { Controls } from './Controls';
@@ -65,21 +64,25 @@ class Slider {
 		this.renderer = new THREE.WebGLRenderer({
 			canvas: this.canvas
 		});
+		this.renderer.setClearColor(new THREE.Color(0x4682b4));
+		
 		this.scene = new THREE.Scene();
-		const camera = new THREE.PerspectiveCamera(
+		this.camera = new THREE.PerspectiveCamera(
 			45,
-			this.canvas.clientWidth / this.canvas.clientWidth,
+			this.canvas.width / this.canvas.height,
 			0.1,
 			2000);
-		camera.position.set(0, 0, 10);
+		this.scene.add(this.camera);
+		this.camera.position.set(0, 0, 100);
+		this.camera.lookAt(this.scene.position);
 		
-		this.camera = camera;
-				
-		this.scene.add(camera);
-		this.geometry = new THREE.PlaneGeometry(28, 9, 4, 4);
+		this.geometry = new THREE.PlaneGeometry(canvas.width, canvas.height);
 		this.material = this.createMaterial();
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
+	
 		this.scene.add(this.mesh);
+		
+		
 		
 	}
 	private initOptions(options?: SliderOption){
@@ -118,10 +121,11 @@ class Slider {
 
 
 	private setBlend(value: number){
-		this.material.uniforms.blend.value = Math.abs(value);
-		if(value > 0.99 || value < -0.99 )
-		{
+		if(value === 0.99 ){
 			this.material.uniforms.blend.value = 1;
+		}
+		else{
+			this.material.uniforms.blend.value = value;
 		}
 	}
 
@@ -224,15 +228,15 @@ class Slider {
 				}
 				
 				if(this.updated){
-					this.setBlend((this.controls.position % this.scrollPerImage) / (this.scrollPerImage));
+					this.setBlend(Math.abs((this.controls.position % this.scrollPerImage) / (this.scrollPerImage)));
 				}
 			}
 
 			this.renderer.render(this.scene,this.camera);
 			if (this.canvas.width !== this.canvas.clientWidth || this.canvas.height !== this.canvas.clientHeight) {
+				this.camera.aspect = this.canvas.clientWidth / this.canvas.clientHeight;
+				this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
 				this.renderer.setPixelRatio(window.devicePixelRatio);
-				this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight, false);
-				this.camera.aspect = this.canvas.clientWidth /  this.canvas.clientHeight;
 				this.camera.updateProjectionMatrix();
 			}
 		});
